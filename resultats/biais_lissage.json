@@ -1,0 +1,27 @@
+{
+  "genere_le": "2026-07-13 19:37 UTC",
+  "donnees_reelles": true,
+  "quoi": "Effet MESURE du lissage mensuel (methode Shiller) sur le resultat DCA vs tout d'un coup",
+  "marche": "Nikkei 225 — seul marche dont on a le quotidien sur longue periode",
+  "source": "FRED (Nikkei Inc.)",
+  "url": "https://fred.stlouisfed.org/series/NIKKEI225",
+  "periode": "1949-05 -> 2026-06",
+  "protocole": "Meme marche, meme periode, meme regle, cash a 0 %. Seule variable : la granularite.",
+  "fin_de_mois_LA_VERITE": {
+    "fenetres": 806,
+    "pct_lump_gagne": 62.9,
+    "ecart_median_pct": 4.12,
+    "pire_fenetre_pct": -37.17
+  },
+  "moyenne_du_mois_METHODE_SHILLER": {
+    "fenetres": 806,
+    "pct_lump_gagne": 64.1,
+    "ecart_median_pct": 3.61,
+    "pire_fenetre_pct": -35.03
+  },
+  "biais_pts_taux_de_victoire": 1.2,
+  "biais_pts_ecart_median": -0.51,
+  "LECTURE": "Le biais est MIXTE, pas unidirectionnel : le lissage gonfle le taux de victoire du tout-d'un-coup mais REDUIT son ecart median. On ne peut pas dire 'ca flatte notre these'. A l'ecran : donner les deux chiffres.",
+  "LIMITE": "Biais mesure sur le NIKKEI. Ce n'est pas mecaniquement sa valeur sur le S&P 500.",
+  "COHERENCE": "La ligne 'fin_de_mois' DOIT reproduire exactement le scenario JP de synthese.json (memes fenetres, meme mediane). Si ce n'est pas le cas, les deux fichiers ne parlent pas des memes donnees -> STOP."
+}

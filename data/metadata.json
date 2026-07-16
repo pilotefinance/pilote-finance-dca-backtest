@@ -1,0 +1,81 @@
+{
+  "genere_le": "2026-07-13 19:37 UTC",
+  "donnees_reelles": true,
+  "avertissement": "Un backtest MESURE LE PASSE. Il ne predit RIEN sur le futur.",
+  "aucune_donnee_inventee": "Aucun ffill, aucun fillna. Un trou = une exception, jamais un zero.",
+  "series": {
+    "us_tr_usd": {
+      "quoi": "S&P 500, rendement TOTAL (dividendes reinvestis), USD, nominal",
+      "source": "Robert Shiller, ie_data.xls",
+      "url": "https://shillerdata.com/",
+      "periode": "1871-02 -> 2026-06",
+      "granularite": "mensuelle",
+      "BIAIS_DECLARE": "Prix = MOYENNES MENSUELLES de cours quotidiens : ca LISSE les krachs. Effet MESURE (pas suppose) : resultats/biais_lissage.json."
+    },
+    "us_ipc": {
+      "quoi": "Indice des prix US (rendement REEL)",
+      "source": "Shiller / BLS CPI-U",
+      "url": "https://shillerdata.com/"
+    },
+    "jp_prix_jpy": {
+      "quoi": "Nikkei 225, PRIX SEUL, en yens",
+      "source": "FRED (Nikkei Inc.)",
+      "url": "https://fred.stlouisfed.org/series/NIKKEI225",
+      "periode": "1949-05 -> 2026-06",
+      "granularite": "dernier cours du mois (pas une moyenne)",
+      "BIAIS_DECLARE": "SANS DIVIDENDES -> le Japon est SOUS-ESTIME. A dire a l'ecran.",
+      "pourquoi": "Marche temoin contre le biais de survie : ne tester que les USA, c'est choisir le marche le plus performant du siecle."
+    },
+    "cash_usd_pct": {
+      "quoi": "Le cash qui ATTEND, en dollars — bon du Tresor 3 mois",
+      "source": "FRED TB3MS",
+      "url": "https://fred.stlouisfed.org/series/TB3MS",
+      "periode": "1934-01 -> 2026-06"
+    },
+    "cash_eur_pct": {
+      "quoi": "Le cash qui ATTEND, en euros — taux interbancaire 3 mois zone euro",
+      "source": "FRED IR3TIB01EZM156N",
+      "url": "https://fred.stlouisfed.org/series/IR3TIB01EZM156N",
+      "periode": "1994-01 -> 2026-01"
+    },
+    "cash_jpy_pct": {
+      "quoi": "Le cash qui ATTEND, en yens — taux interbancaire 3 mois",
+      "source": "FRED IR3TIB01JPM156N",
+      "url": "https://fred.stlouisfed.org/series/IR3TIB01JPM156N",
+      "periode": "2002-04 -> 2026-04",
+      "LIMITE_ASSUMEE": "Commence en 2002 : ne couvre PAS le krach japonais de 1990. Le scenario Japon long tourne donc avec le cash a 0 %, ce qui DEFAVORISE le DCA japonais -> notre chiffre japonais pour le 'tout d'un coup' est un PLAFOND. Dit a l'ecran."
+    },
+    "usd_par_eur": {
+      "quoi": "USD par EUR",
+      "source": "FRED EXUSEU",
+      "url": "https://fred.stlouisfed.org/series/EXUSEU",
+      "periode": "1999-01 -> 2026-06",
+      "LIMITE_ASSUMEE": "L'EURO N'EXISTE PAS AVANT 1999. Aucun euro synthetique fabrique : les colonnes EUR sont VIDES avant 1999."
+    },
+    "jpy_par_usd": {
+      "quoi": "Yens par USD",
+      "source": "FRED EXJPUS",
+      "url": "https://fred.stlouisfed.org/series/EXJPUS"
+    },
+    "us_tr_eur": {
+      "quoi": "SERIE DERIVEE — S&P 500 rendement total, vu par un investisseur en EUROS",
+      "calcul": "us_tr_usd / usd_par_eur",
+      "sources": [
+        "Shiller ie_data.xls",
+        "FRED EXUSEU"
+      ],
+      "LIMITE_ASSUMEE": "Commence en 1999-01 : avant, l'euro n'existe pas. Aucun ECU synthetique n'est fabrique.",
+      "pourquoi": "L'effet de change peut peser autant que le marche lui-meme. Un Francais qui achete du S&P 500 n'obtient PAS le rendement du S&P 500."
+    },
+    "jp_prix_eur": {
+      "quoi": "SERIE DERIVEE — Nikkei 225 (PRIX SEUL), vu par un investisseur en EUROS",
+      "calcul": "jp_prix_jpy / jpy_par_usd / usd_par_eur  (yen -> dollar -> euro)",
+      "sources": [
+        "FRED NIKKEI225",
+        "FRED EXJPUS",
+        "FRED EXUSEU"
+      ],
+      "LIMITE_ASSUMEE": "1999+ (euro) ET sans dividendes (Nikkei prix seul) : DOUBLE sous-estimation du Japon. A dire a l'ecran."
+    }
+  }
+}

@@ -1,0 +1,8 @@
+# Module BACKTEST — Pilote Finance. Versions verifiees le 13/07/2026 (regle code.md §2).
+pandas==2.3.3
+numpy==2.2.6
+requests==2.32.3
+xlrd==2.0.1        # OBLIGATOIRE : le fichier Shiller est un .xls (BIFF), openpyxl ne sait pas le lire
+openpyxl==3.1.5
+matplotlib==3.10.9 # pour le module data-film
+ruff==0.14.5       # gate lint
