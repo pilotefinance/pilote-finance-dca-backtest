@@ -37,6 +37,38 @@ python mesure_biais_lissage.py    # -> resultats/biais_lissage.json
 | `resultats/*.csv` | Le détail fenêtre par fenêtre (chaque chiffre a son fichier). |
 | `BUG_v1_2026-07-13.md` | Le bug de la v1, documenté. |
 
+## Épisode 2 — « Attendre le krach pour investir ? »
+
+Le même dépôt porte le moteur du **deuxième épisode** : *faut-il attendre un krach avant
+d'investir ?* Quatre robots, 10 000 $, un horizon de 10 ans, **990 départs mensuels** de
+janvier 1934 à juin 2026 — celui qui investit tout de suite, et ceux qui attendent un repli de
+10 %, 20 % ou 30 % avant d'entrer, leur argent placé en bons du Trésor pendant l'attente.
+
+**Le protocole a été figé AVANT le moindre calcul** : [`PROTOCOLE_ep2_krach.md`](PROTOCOLE_ep2_krach.md).
+Période, règles et métriques y sont verrouillées, et **toutes les fenêtres sont publiées, jamais
+une sélection**.
+
+```bash
+python backtest_krach.py        # -> resultats/krach_*.csv + resultats/synthese_krach.json
+python mesure_biais_seuil.py    # -> resultats/biais_seuil.json (granularité + prix vs rdt total)
+python -m pytest test_backtest_krach.py
+```
+
+| Fichier | À quoi il sert |
+|---|---|
+| `backtest_krach.py` | Le moteur de l'ép. 2 : seuils de repli, attente en cash, 990 fenêtres. |
+| `PROTOCOLE_ep2_krach.md` | Le protocole **figé avant calcul** (règle du Statisticien). |
+| `CONTRAT_backtest_krach.md` | Ce que le module garantit — et ce qu'il refuse de faire. |
+| `mesure_biais_seuil.py` | Mesure deux biais : la granularité mensuelle **lisse les krachs**, et l'indice de prix n'est pas le rendement total. |
+| `resultats/synthese_krach.json` | Tous les scénarios + les avertissements à lire avant de citer un chiffre. |
+| `resultats/cartes_ep2.json` | Les chiffres réellement affichés à l'écran, chacun avec sa source. |
+| `resultats/SECTION_7.md` | Le tableau complet des résultats. |
+
+Deux points que la vidéo dit et que le code prouve : le krach de −20 % **n'est jamais venu dans
+32 % des fenêtres de 10 ans**, et le krach de 2020 vaut −33,9 % en cours quotidiens mais
+−18,9 % dans notre donnée mensuelle en rendement total — **le même krach, trois mesures**, et le
+robot ne se déclenche pas.
+
 ## À lire avant de citer un chiffre
 
 `resultats/synthese.json` contient une section `A_LIRE_AVANT_DE_CITER_UN_CHIFFRE`. Elle n'est pas

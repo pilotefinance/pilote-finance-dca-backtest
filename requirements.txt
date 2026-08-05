@@ -1,8 +1,15 @@
-# Module BACKTEST — Pilote Finance. Versions verifiees le 13/07/2026 (regle code.md §2).
+# Module BACKTEST — Pilote Finance.
+# Versions RECOUPEES avec l'environnement reel (`pip freeze`) le 04/08/2026 — regle code.md §2.
+# ⚠️ La v1 de ce fichier (13/07/2026) annoncait des versions qui n'etaient PAS celles installees
+#    (requests 2.32.3, ruff 0.14.5), et xlrd n'etait meme pas installe : build_data.py ne pouvait
+#    donc pas tourner. Un inventaire faux vaut moins que pas d'inventaire. Attrape par le code-reviewer.
 pandas==2.3.3
 numpy==2.2.6
-requests==2.32.3
+requests==2.34.2
 xlrd==2.0.1        # OBLIGATOIRE : le fichier Shiller est un .xls (BIFF), openpyxl ne sait pas le lire
 openpyxl==3.1.5
-matplotlib==3.10.9 # pour le module data-film
-ruff==0.14.5       # gate lint
+pytest==9.1.1      # gate tests : python -m pytest
+ruff==0.15.18      # gate lint  : python -m ruff check --config <PiloteFinance>/ruff.toml .
+
+# matplotlib : listee dans la v1 « pour le module data-film », mais AUCUN script de ce depot ne
+# l'importe et elle n'est pas installee. Retiree plutot que gardee par superstition.

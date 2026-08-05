@@ -1,0 +1,1255 @@
+{
+  "genere_le": "2026-08-04 22:32 UTC",
+  "donnees_reelles": true,
+  "protocole": "PF_LeTest_Ep2_Krach_PROTOCOLE.md (FIGE avant le calcul)",
+  "contrat": "CONTRAT_backtest_krach.md",
+  "avertissement": "Un backtest MESURE LE PASSE. Il ne predit RIEN sur le futur.",
+  "A_LIRE_AVANT_DE_CITER_UN_CHIFFRE": {
+    "le_protocole_etait_FIGE_avant_le_calcul": "Periode, regles et metriques sont verrouillees dans PF_LeTest_Ep2_Krach_PROTOCOLE.md AVANT que ce script tourne. Toutes les fenetres sont publiees, jamais une selection.",
+    "PWL_et_B20_sont_COMPLEMENTAIRES_pas_concurrents": "PWL (Table 7 p. 9, 50,00 % aux USA) mesure : le krach A DEJA EU LIEU, je place tout d'un coup ou j'etale sur 12 mois ? Notre B20 mesure : le krach N'A PAS ENCORE EU LIEU, faut-il l'attendre en cash ? Ce sont DEUX QUESTIONS DIFFERENTES. Presenter l'une comme un 'ecart' a l'autre serait une faute de lecture. Fact-check du 04/08/2026 : les deux etudes utilisent des indices de RENDEMENT TOTAL — l'hypothese d'un ecart prix/dividendes est ECARTEE ; l'ecart vient de la PERIODE (PWL inclut les annees 1930, pas nous) et de l'INDICE (CRSP 1-10 vs S&P 500).",
+    "le_plus_haut_ARBITRE_le_04_08_2026": "Le protocole ne disait pas si le plus-haut pouvait etre anterieur a t0. ARBITRAGE ALEKSANDAR : la lecture PRINCIPALE est 'depuis_t0' (le plus-haut observe depuis que l'investisseur a l'argent). La lecture 'ath' (plus-haut historique reel) reste PUBLIEE en comparaison — scenario US_plushaut_historique. Elles ne donnent PAS le meme chiffre : citer l'un sans dire lequel, c'est cacher la moitie du resultat.",
+    "le_plus_haut_ne_remonte_pas_avant_le_debut_de_la_SERIE": "En mode 'ath', le plus-haut est le maximum depuis le PREMIER MOIS DISPONIBLE de la serie : 1871 pour le S&P 500, mais 1949 pour le Nikkei et 1999 pour les series en euros (champ 'plus_haut_remonte_a' de chaque scenario). Les toutes premieres fenetres de ces series voient donc un plus-haut tronque.",
+    "les_egalites_ne_sont_PAS_des_defaites_EN_LECTURE_ath": "⚠️ NE CONCERNE PAS LE SCENARIO PRINCIPAL (lecture depuis_t0, ou il n'y a aucune egalite). En lecture 'ath', une fenetre qui demarre DEJA sous le seuil fait investir B des t0 : B est alors STRICTEMENT identique a A. Ces fenetres sont comptees a part (pct_fenetres_egalite_stricte). Les noyer dans 'A bat B' gonflerait artificiellement le score du temoin.",
+    "comparer_achat_M1_au_principal_EST_LICITE_en_lecture_depuis_t0": "En lecture 'depuis_t0' (le scenario principal) aucune fenetre ne declenche a t0 : la comparaison brute entre US_principal et US_achat_M1 EST valide, le delai d'execution est la seule chose qui change. ⚠️ En lecture 'ath' en revanche elle ne l'est PAS : les fenetres qui declenchaient a t0 cessent d'etre des egalites strictes et deviennent des victoires ou des defaites, donc le taux brut bouge pour une raison COMPTABLE. Pour ces scenarios-la, passer par le bloc 'quand_le_signal_est_venu_APRES_t0'.",
+    "le_repli_est_mesure_en_RENDEMENT_TOTAL_pas_en_prix": "Le protocole §3 fixe le S&P 500 dividendes REINVESTIS : le repli des robots B est donc calcule sur le rendement total, pas sur l'indice de prix dont parlent les medias quand ils annoncent un 'bear market'. Les dividendes reinvestis rabotent mecaniquement le repli. Effet MESURE (pas suppose) : biais_seuil.json.",
+    "granularite_mensuelle": "Les prix Shiller sont des MOYENNES MENSUELLES de cours quotidiens : elles LISSENT les krachs. Effet MESURE sur le DECLENCHEMENT D'UN SEUIL : resultats/biais_seuil.json (section A, sur le Nikkei quotidien). ⚠️ Ne PAS confondre avec resultats/biais_lissage.json (ep. 1), qui mesure l'effet du lissage sur l'ecart lump/DCA — une autre question.",
+    "acheter_le_mois_du_signal_FLATTE_B": "Le scenario principal fait acheter B a la valeur du mois ou le repli est constate. Le scenario 'US_achat_M1' mesure un mois de reaction en plus — a lire via le bloc 'quand_le_signal_est_venu_APRES_t0', pas via le taux brut.",
+    "le_Japon_avec_cash_a_0_est_un_PLANCHER_pour_B": "Le taux court japonais (FRED) commence en 2002 et ne couvre pas le krach de 1990 : le scenario japonais long fait donc attendre B a 0 %. Ca DEFAVORISE B. Son chiffre japonais est un plancher, pas une mesure exacte.",
+    "le_Nikkei_est_SANS_DIVIDENDES": "FRED NIKKEI225 = PRIX SEUL. Le Japon est donc sous-estime pour TOUTES les strategies (A comme B). A dire a l'ecran.",
+    "certains_scenarios_ne_mesurent_RIEN_EN_LECTURE_ath": "⚠️ NE CONCERNE QUE LES SCENARIOS EN LECTURE 'ath'. Quand 100 % des fenetres declenchent a t0 (le Nikkei post-2002 est sous son pic de 1989 pendant des decennies), B n'attend jamais : il EST A. Ces scenarios portent un champ 'AVERTISSEMENT_SCENARIO_DEGENERE'. Les aligner dans un tableau a cote de scenarios qui mesurent quelque chose serait trompeur.",
+    "periodes_non_comparables": "Ne JAMAIS comparer deux scenarios dont le champ 'periode' differe (US_long_1871, US_EUR, JP, JP_cash_remunere_2002) : on comparerait des donnees, pas une hypothese.",
+    "fenetres_chevauchantes": "Des fenetres de 10 ans a pas mensuel se recouvrent : elles ne sont PAS des observations independantes. Aucun test de significativite, aucune p-value n'est publiee. On DECRIT le passe, on n'infere rien.",
+    "ecart_pct_n_est_PAS_une_perte": "L'ecart est RELATIF entre DEUX STRATEGIES. '-30 %' ne veut pas dire 'on perd 30 %' : ca veut dire que B finit 30 % sous A. A dire autrement a l'ecran.",
+    "aucune_conclusion_sur_le_FUTUR": "Un backtest MESURE LE PASSE. Il ne predit RIEN. Interdiction de conclure « donc fais X » (protocole §6, compliance-finance v2)."
+  },
+  "replique_pwl": {
+    "AVERTISSEMENT_LECTURE": "PWL et notre B20 sont COMPLEMENTAIRES, pas concurrents. PWL : « le krach a eu lieu, comment je place ? ». B20 : « le krach n'a pas eu lieu, faut-il l'attendre ? ». Presenter l'un comme un ecart a l'autre serait une FAUTE.",
+    "ce_que_PWL_mesure": "Fenetres demarrant LE MOIS SUIVANT une chute >= 20 % depuis le plus-haut precedent : le tout d'un coup bat-il le DCA sur 12 mois ?",
+    "PWL": {
+      "etude": "Benjamin Felix, PWL Capital, « Dollar Cost Averaging vs. Lump Sum Investing », juin 2020",
+      "url": "https://pwlcapital.com/wp-content/uploads/2024/08/Dollar-Cost-Averaging-vs-Lump-Sum-Investing.pdf",
+      "table": "Table 7, p. 9",
+      "indice_us": "CRSP 1-10, RENDEMENT TOTAL (pas un indice de prix)",
+      "periode_us": "01/1926 -> 03/2020",
+      "cash": "bons du Tresor US 1 MOIS",
+      "devise": "USD",
+      "regle": "LSI (tout d'un coup) vs DCA sur 12 MOIS, sur des fenetres demarrant LE MOIS SUIVANT une chute >= 20 % « from the previous peak » (mesuree en donnees MENSUELLES)",
+      "us_pct": 50.0,
+      "moyenne_6_marches_pct": 53.66,
+      "avantage_annualise_LSI_pts": 0.25,
+      "attribution_PWL": "PWL attribue lui-meme la faiblesse du chiffre americain aux annees 1930, incluses dans sa periode (depuis 1926) et ABSENTES de la notre (depuis 1934, faute de taux court US avant cette date)."
+    },
+    "notre_replique_pct": 71.3,
+    "ecart_points": 21.3,
+    "fenetres_retenues": 181,
+    "blocs_de_fenetres_contigus": 14,
+    "CE_QUE_LES_BLOCS_NE_SONT_PAS": "Un bloc = une suite de fenetres eligibles qui se touchent. Ce n'est PAS un bear market distinct : un meme krach se recoupe en plusieurs blocs des que l'indice repasse un mois au-dessus du seuil (1937, 1987-88 et 2004 sont dans ce cas). Le nombre de krachs REELLEMENT distincts est donc encore PLUS PETIT que ce chiffre. L'erreur va dans le sens qui rassure — on la declare.",
+    "fenetres_totales": 990,
+    "meme_test_SANS_condition_de_repli_pct": 68.9,
+    "pourquoi_l_ecart": {
+      "verdict": "ECART SIGNALE, PAS EXPLIQUE. La seule hypothese disponible est celle que PWL avance lui-meme (ses annees 1926-1933) — et nous NE POUVONS PAS la tester.",
+      "hypothese_de_PWL": "PWL attribue lui-meme la faiblesse du chiffre americain aux annees 1930, incluses dans sa periode (depuis 1926) et ABSENTES de la notre (depuis 1934, faute de taux court US avant cette date).",
+      "notre_periode_commence_en": "1934-01",
+      "CE_QU_ON_NE_PEUT_PAS_FAIRE": "Rejouer PWL sur 1926-1933 chez nous : le taux court US (FRED TB3MS) commence en 1934-01. Sans lui, le cash du DCA serait a 0 %, ce qui FAVORISE mecaniquement le tout d'un coup — on ne reconstituerait donc pas le chiffre de PWL, on en fabriquerait un autre. On s'arrete et on le dit.",
+      "diagnostic_decoupage_ex_post": {
+        "⛔_AVERTISSEMENT": "Chiffres de DIAGNOSTIC pour le fact-check. INTERDITS A L'ECRAN et INTERDITS dans SECTION_7.md : decouper la periode APRES avoir vu le resultat, c'est exactement ce que le protocole interdit de publier.",
+        "departs_1934_1949_pct": 64.1,
+        "fenetres_1934_1949": 103,
+        "departs_1950_et_apres_pct": 80.8,
+        "fenetres_1950_et_apres": 78,
+        "CE_QUE_CA_DIT_VRAIMENT": "Nos fenetres les plus ANCIENNES (1934-1949) sont les MOINS favorables au tout d'un coup, pas les plus. L'intuition « nos fenetres post-krach sont des sorties de crise gagnantes » est donc FAUSSE sur nos donnees : elle a ete ecrite puis retiree le 05/08/2026 apres verification. Ce diagnostic ne dit PAS d'ou vient l'ecart avec PWL — il dit seulement que cette explication-la ne tient pas."
+      }
+    },
+    "differences_declarees": [
+      "Indice : S&P 500 dividendes reinvestis (Shiller) vs CRSP 1-10 (PWL). ⚠️ LES DEUX sont des indices de RENDEMENT TOTAL : l'ecart ne vient PAS d'un choix prix vs dividendes reinvestis.",
+      "Periode : 1934-01 -> 2026-06 vs 01/1926 -> 03/2020 (PWL). C'est la difference principale : les annees 1930 sont chez eux, pas chez nous.",
+      "Granularite : nos prix Shiller sont des MOYENNES MENSUELLES ; la chute de 20 % de PWL est elle aussi mesuree en donnees mensuelles.",
+      "Cash : bon du Tresor 3 mois (TB3MS) chez nous, bons du Tresor US 1 MOIS chez PWL."
+    ]
+  },
+  "le_signal_dans_la_donnee": {
+    "marche": "US",
+    "periode": "1934-01 -> 2026-06",
+    "plus_haut_remonte_a": "1871-02",
+    "mois_observes": 1110,
+    "seuils": {
+      "B10": {
+        "mois_sous_le_seuil": 346,
+        "pct_du_temps_sous_le_seuil": 31.2,
+        "dernier_mois_sous_le_seuil": "2025-04"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 180,
+        "pct_du_temps_sous_le_seuil": 16.2,
+        "dernier_mois_sous_le_seuil": "2010-09"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 123,
+        "pct_du_temps_sous_le_seuil": 11.1,
+        "dernier_mois_sous_le_seuil": "2009-08"
+      }
+    },
+    "depuis_le_dernier_signal_-20pct": {
+      "dernier_signal": "2010-09",
+      "mois_ecoules_sans_signal": 189,
+      "pire_repli_mensuel_depuis": -19.26,
+      "date_du_pire_repli": "2022-10",
+      "3_pires_annees": [
+        {
+          "annee": 2022,
+          "pire_repli_pct": -19.26
+        },
+        {
+          "annee": 2020,
+          "pire_repli_pct": -18.92
+        },
+        {
+          "annee": 2010,
+          "pire_repli_pct": -18.32
+        }
+      ]
+    }
+  },
+  "biais_du_seuil_mesure": "resultats/biais_seuil.json",
+  "controle_croise": {
+    "verdict": "OK",
+    "quoi": "Nombre de mois sous chaque seuil, calcule par DEUX chemins independants (data/marches.csv vs .xls Shiller retelecharge). Identiques.",
+    "seuils_verifies": [
+      "B10",
+      "B20",
+      "B30"
+    ],
+    "genere_le_biais": "2026-08-04 21:45 UTC"
+  },
+  "scenarios": [
+    {
+      "marche": "US",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "taux_court",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": "1934-01",
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1871-02",
+      "fenetres": 990,
+      "periode": "1934-01 -> 2026-06",
+      "A_multiple_median": 3.02,
+      "A_pire": {
+        "multiple": 0.7,
+        "depart": "1999-03"
+      },
+      "A_meilleur": {
+        "multiple": 6.82,
+        "depart": "1949-06"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 39.1,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 60.9,
+          "ecart_median_pct": -7.15,
+          "ecart_moyen_pct": -13.23,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 31.4,
+          "attente_mediane_mois_quand_on_attend": 26.0,
+          "attente_max_mois": 111,
+          "pire": {
+            "multiple": 0.72,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.96,
+            "depart": "1990-04"
+          },
+          "ecart_pire_pct": -74.86,
+          "ecart_meilleur_pct": 37.9,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 990,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 39.1,
+            "ecart_median_pct": -7.15,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 36.1,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 63.9,
+          "ecart_median_pct": -27.62,
+          "ecart_moyen_pct": -22.41,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 32.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 48.9,
+          "attente_mediane_mois_quand_on_attend": 43.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.94,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.12,
+            "depart": "1987-09"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 58.41,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 673,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 317,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 53.0,
+            "ecart_median_pct": 2.14,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 26.5,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 73.5,
+          "ecart_median_pct": -48.39,
+          "ecart_moyen_pct": -30.31,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 64.4,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 54.9,
+          "attente_mediane_mois_quand_on_attend": 51.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.97,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 4.39,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 78.08,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 352,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 638,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 73.3,
+            "ecart_median_pct": 31.52,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_principal",
+      "fichier": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv",
+      "fenetres_citees": [
+        {
+          "depart": "2016-06",
+          "fin": "2026-06",
+          "A_multiple": 4.21,
+          "B20_multiple": 1.26,
+          "ecart_pct": -70.1,
+          "le_signal_est_venu": false,
+          "rang_parmi_les_pires": 183,
+          "fenetres_totales": 990,
+          "AVERTISSEMENT": "Fenetre ILLUSTRATIVE, choisie pour sa lisibilite (elle est recente). Ce n'est PAS le pire cas : voir le rang. Le pire cas est au §7.3."
+        }
+      ]
+    },
+    {
+      "marche": "US",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "taux_court",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": "1934-01",
+      "reference": "ath",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1871-02",
+      "fenetres": 990,
+      "periode": "1934-01 -> 2026-06",
+      "A_multiple_median": 3.02,
+      "A_pire": {
+        "multiple": 0.7,
+        "depart": "1999-03"
+      },
+      "A_meilleur": {
+        "multiple": 6.82,
+        "depart": "1949-06"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 29.0,
+          "pct_fenetres_egalite_stricte": 33.3,
+          "pct_fenetres_ou_A_bat_B": 37.7,
+          "ecart_median_pct": 0.0,
+          "ecart_moyen_pct": -8.81,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 33.3,
+          "attente_moyenne_mois_quand_on_attend": 30.6,
+          "attente_mediane_mois_quand_on_attend": 24.0,
+          "attente_max_mois": 99,
+          "pire": {
+            "multiple": 0.72,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 6.87,
+            "depart": "1949-05"
+          },
+          "ecart_pire_pct": -73.3,
+          "ecart_meilleur_pct": 23.63,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 660,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 330,
+            "pct_ou_B_bat_A": 43.5,
+            "ecart_median_pct": -5.04,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 29.8,
+          "pct_fenetres_egalite_stricte": 18.2,
+          "pct_fenetres_ou_A_bat_B": 52.0,
+          "ecart_median_pct": -6.69,
+          "ecart_moyen_pct": -18.79,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 24.5,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 18.2,
+          "attente_moyenne_mois_quand_on_attend": 50.3,
+          "attente_mediane_mois_quand_on_attend": 44.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.94,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.74,
+            "depart": "1988-04"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 58.41,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 567,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 243,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 180,
+            "pct_ou_B_bat_A": 52.0,
+            "ecart_median_pct": 1.38,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 26.6,
+          "pct_fenetres_egalite_stricte": 12.4,
+          "pct_fenetres_ou_A_bat_B": 61.0,
+          "ecart_median_pct": -39.93,
+          "ecart_moyen_pct": -24.76,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 55.4,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 12.4,
+          "attente_moyenne_mois_quand_on_attend": 51.8,
+          "attente_mediane_mois_quand_on_attend": 48.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.97,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.32,
+            "depart": "1942-04"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 65.45,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 319,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 548,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 123,
+            "pct_ou_B_bat_A": 81.2,
+            "ecart_median_pct": 33.19,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_plushaut_historique",
+      "fichier": "krach_US_plushaut_historique_US_ath_taux_court_1934-01.csv"
+    },
+    {
+      "marche": "US",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "taux_court",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": "1934-01",
+      "reference": "depuis_t0",
+      "delai_execution": 1,
+      "plus_haut_remonte_a": "1871-02",
+      "fenetres": 990,
+      "periode": "1934-01 -> 2026-06",
+      "A_multiple_median": 3.02,
+      "A_pire": {
+        "multiple": 0.7,
+        "depart": "1999-03"
+      },
+      "A_meilleur": {
+        "multiple": 6.82,
+        "depart": "1949-06"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 41.4,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 58.6,
+          "ecart_median_pct": -4.68,
+          "ecart_moyen_pct": -11.42,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 31.4,
+          "attente_mediane_mois_quand_on_attend": 26.0,
+          "attente_max_mois": 111,
+          "pire": {
+            "multiple": 0.72,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 6.14,
+            "depart": "1990-04"
+          },
+          "ecart_pire_pct": -74.33,
+          "ecart_meilleur_pct": 50.91,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 990,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 41.4,
+            "ecart_median_pct": -4.68,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 35.9,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 64.1,
+          "ecart_median_pct": -26.71,
+          "ecart_moyen_pct": -21.42,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 32.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 48.9,
+          "attente_mediane_mois_quand_on_attend": 43.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.91,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.22,
+            "depart": "1987-09"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 73.35,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 673,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 317,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 52.7,
+            "ecart_median_pct": 3.0,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 27.9,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 72.1,
+          "ecart_median_pct": -48.31,
+          "ecart_moyen_pct": -26.17,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 64.4,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 54.9,
+          "attente_mediane_mois_quand_on_attend": 51.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 1.03,
+            "depart": "1937-09"
+          },
+          "meilleur": {
+            "multiple": 4.65,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -82.39,
+          "ecart_meilleur_pct": 85.04,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 352,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 638,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 77.3,
+            "ecart_median_pct": 43.31,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_achat_M1",
+      "fichier": "krach_US_achat_M1_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "marche": "US",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "zero",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": "1934-01",
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1871-02",
+      "fenetres": 990,
+      "periode": "1934-01 -> 2026-06",
+      "A_multiple_median": 3.02,
+      "A_pire": {
+        "multiple": 0.7,
+        "depart": "1999-03"
+      },
+      "A_meilleur": {
+        "multiple": 6.82,
+        "depart": "1949-06"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 30.3,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 69.7,
+          "ecart_median_pct": -16.9,
+          "ecart_moyen_pct": -19.71,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 31.4,
+          "attente_mediane_mois_quand_on_attend": 26.0,
+          "attente_max_mois": 111,
+          "pire": {
+            "multiple": 0.66,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.85,
+            "depart": "1990-07"
+          },
+          "ecart_pire_pct": -78.29,
+          "ecart_meilleur_pct": 37.31,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 990,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 30.3,
+            "ecart_median_pct": -16.9,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 26.5,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 73.5,
+          "ecart_median_pct": -41.32,
+          "ecart_moyen_pct": -34.16,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 32.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 48.9,
+          "attente_mediane_mois_quand_on_attend": 43.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.82,
+            "depart": "1993-02"
+          },
+          "meilleur": {
+            "multiple": 5.07,
+            "depart": "1987-09"
+          },
+          "ecart_pire_pct": -85.35,
+          "ecart_meilleur_pct": 55.51,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 673,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 317,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 38.9,
+            "ecart_median_pct": -9.03,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 18.9,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 81.1,
+          "ecart_median_pct": -66.84,
+          "ecart_moyen_pct": -46.0,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 64.4,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 54.9,
+          "attente_mediane_mois_quand_on_attend": 51.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.84,
+            "depart": "1993-02"
+          },
+          "meilleur": {
+            "multiple": 4.38,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -85.35,
+          "ecart_meilleur_pct": 58.48,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 352,
+            "fenetres_totales": 990,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 638,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 53.1,
+            "ecart_median_pct": 2.26,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_cash_zero",
+      "fichier": "krach_US_cash_zero_US_depuis_t0_zero_1934-01.csv"
+    },
+    {
+      "marche": "US",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "zero",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": null,
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1871-02",
+      "fenetres": 1745,
+      "periode": "1871-02 -> 2026-06",
+      "A_multiple_median": 2.31,
+      "A_pire": {
+        "multiple": 0.66,
+        "depart": "1929-08"
+      },
+      "A_meilleur": {
+        "multiple": 6.82,
+        "depart": "1949-06"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 35.9,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 64.1,
+          "ecart_median_pct": -9.83,
+          "ecart_moyen_pct": -15.89,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 28.3,
+          "attente_mediane_mois_quand_on_attend": 23.0,
+          "attente_max_mois": 111,
+          "pire": {
+            "multiple": 0.41,
+            "depart": "1923-05"
+          },
+          "meilleur": {
+            "multiple": 6.51,
+            "depart": "1919-09"
+          },
+          "ecart_pire_pct": -78.81,
+          "ecart_meilleur_pct": 37.31,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 1745,
+            "fenetres_totales": 1745,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 35.9,
+            "ecart_median_pct": -9.83,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 32.3,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 67.7,
+          "ecart_median_pct": -20.85,
+          "ecart_moyen_pct": -24.72,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 19.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 50.2,
+          "attente_mediane_mois_quand_on_attend": 45.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.28,
+            "depart": "1922-06"
+          },
+          "meilleur": {
+            "multiple": 7.33,
+            "depart": "1919-09"
+          },
+          "ecart_pire_pct": -85.35,
+          "ecart_meilleur_pct": 58.87,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 1413,
+            "fenetres_totales": 1745,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 332,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 39.9,
+            "ecart_median_pct": -7.32,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 18.9,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 81.1,
+          "ecart_median_pct": -54.62,
+          "ecart_moyen_pct": -40.13,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 60.1,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 54.6,
+          "attente_mediane_mois_quand_on_attend": 52.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.28,
+            "depart": "1922-06"
+          },
+          "meilleur": {
+            "multiple": 4.38,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -85.35,
+          "ecart_meilleur_pct": 78.45,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 697,
+            "fenetres_totales": 1745,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 1048,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 47.3,
+            "ecart_median_pct": -2.9,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_long_1871",
+      "fichier": "krach_US_long_1871_US_depuis_t0_zero_tout.csv"
+    },
+    {
+      "marche": "US_EUR",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "taux_court",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": null,
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1999-01",
+      "fenetres": 205,
+      "periode": "1999-01 -> 2026-01",
+      "A_multiple_median": 2.51,
+      "A_pire": {
+        "multiple": 0.58,
+        "depart": "1999-03"
+      },
+      "A_meilleur": {
+        "multiple": 5.56,
+        "depart": "2011-08"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 50.2,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 49.8,
+          "ecart_median_pct": 1.16,
+          "ecart_moyen_pct": -3.97,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 20.5,
+          "attente_mediane_mois_quand_on_attend": 17.0,
+          "attente_max_mois": 58,
+          "pire": {
+            "multiple": 0.48,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.42,
+            "depart": "2011-07"
+          },
+          "ecart_pire_pct": -55.41,
+          "ecart_meilleur_pct": 29.77,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 205,
+            "fenetres_totales": 205,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 50.2,
+            "ecart_median_pct": 1.16,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 54.1,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 45.9,
+          "ecart_median_pct": 5.19,
+          "ecart_moyen_pct": -20.56,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 42.9,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 24.7,
+          "attente_mediane_mois_quand_on_attend": 18.0,
+          "attente_max_mois": 68,
+          "pire": {
+            "multiple": 0.55,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 4.73,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -82.12,
+          "ecart_meilleur_pct": 46.54,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 117,
+            "fenetres_totales": 205,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 88,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 94.9,
+            "ecart_median_pct": 22.6,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 57.1,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 42.9,
+          "ecart_median_pct": 23.93,
+          "ecart_moyen_pct": -9.43,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 42.9,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 31.4,
+          "attente_mediane_mois_quand_on_attend": 25.0,
+          "attente_max_mois": 76,
+          "pire": {
+            "multiple": 0.64,
+            "depart": "1999-03"
+          },
+          "meilleur": {
+            "multiple": 5.28,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -82.12,
+          "ecart_meilleur_pct": 69.42,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 117,
+            "fenetres_totales": 205,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 88,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 100.0,
+            "ecart_median_pct": 42.79,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "US_EUR",
+      "fichier": "krach_US_EUR_US_EUR_depuis_t0_taux_court_tout.csv"
+    },
+    {
+      "marche": "JP",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "zero",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": null,
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1949-05",
+      "fenetres": 806,
+      "periode": "1949-05 -> 2026-06",
+      "A_multiple_median": 2.37,
+      "A_pire": {
+        "multiple": 0.37,
+        "depart": "1993-04"
+      },
+      "A_meilleur": {
+        "multiple": 13.62,
+        "depart": "1951-04"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 46.2,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 53.8,
+          "ecart_median_pct": -2.79,
+          "ecart_moyen_pct": -9.28,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 16.7,
+          "attente_mediane_mois_quand_on_attend": 10.0,
+          "attente_max_mois": 83,
+          "pire": {
+            "multiple": 0.39,
+            "depart": "1988-09"
+          },
+          "meilleur": {
+            "multiple": 12.67,
+            "depart": "1950-04"
+          },
+          "ecart_pire_pct": -74.53,
+          "ecart_meilleur_pct": 31.28,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 806,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 46.2,
+            "ecart_median_pct": -2.79,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 40.4,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 59.6,
+          "ecart_median_pct": -13.53,
+          "ecart_moyen_pct": -16.67,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 8.4,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 29.7,
+          "attente_mediane_mois_quand_on_attend": 22.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.45,
+            "depart": "1988-09"
+          },
+          "meilleur": {
+            "multiple": 10.56,
+            "depart": "1949-11"
+          },
+          "ecart_pire_pct": -83.12,
+          "ecart_meilleur_pct": 57.18,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 738,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 68,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 44.2,
+            "ecart_median_pct": -7.93,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 32.5,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 67.5,
+          "ecart_median_pct": -47.21,
+          "ecart_moyen_pct": -26.43,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 26.7,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 47.7,
+          "attente_mediane_mois_quand_on_attend": 38.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.52,
+            "depart": "1988-09"
+          },
+          "meilleur": {
+            "multiple": 10.32,
+            "depart": "1949-10"
+          },
+          "ecart_pire_pct": -83.12,
+          "ecart_meilleur_pct": 82.82,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 591,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 215,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 44.3,
+            "ecart_median_pct": -12.67,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "JP",
+      "fichier": "krach_JP_JP_depuis_t0_zero_tout.csv"
+    },
+    {
+      "marche": "JP",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "zero",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": null,
+      "reference": "ath",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1949-05",
+      "fenetres": 806,
+      "periode": "1949-05 -> 2026-06",
+      "A_multiple_median": 2.37,
+      "A_pire": {
+        "multiple": 0.37,
+        "depart": "1993-04"
+      },
+      "A_meilleur": {
+        "multiple": 13.62,
+        "depart": "1951-04"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 10.4,
+          "pct_fenetres_egalite_stricte": 64.6,
+          "pct_fenetres_ou_A_bat_B": 24.9,
+          "ecart_median_pct": 0.0,
+          "ecart_moyen_pct": -5.77,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 64.6,
+          "attente_moyenne_mois_quand_on_attend": 19.4,
+          "attente_mediane_mois_quand_on_attend": 14.0,
+          "attente_max_mois": 67,
+          "pire": {
+            "multiple": 0.37,
+            "depart": "1993-04"
+          },
+          "meilleur": {
+            "multiple": 13.62,
+            "depart": "1951-04"
+          },
+          "ecart_pire_pct": -68.11,
+          "ecart_meilleur_pct": 23.77,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 285,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 521,
+            "pct_ou_B_bat_A": 29.5,
+            "ecart_median_pct": -12.98,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 17.9,
+          "pct_fenetres_egalite_stricte": 50.9,
+          "pct_fenetres_ou_A_bat_B": 31.3,
+          "ecart_median_pct": 0.0,
+          "ecart_moyen_pct": -13.32,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 6.6,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 50.9,
+          "attente_moyenne_mois_quand_on_attend": 30.9,
+          "attente_mediane_mois_quand_on_attend": 20.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.37,
+            "depart": "1993-04"
+          },
+          "meilleur": {
+            "multiple": 13.62,
+            "depart": "1951-04"
+          },
+          "ecart_pire_pct": -83.12,
+          "ecart_meilleur_pct": 47.22,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 343,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 53,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 410,
+            "pct_ou_B_bat_A": 42.0,
+            "ecart_median_pct": -11.65,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 14.9,
+          "pct_fenetres_egalite_stricte": 42.3,
+          "pct_fenetres_ou_A_bat_B": 42.8,
+          "ecart_median_pct": 0.0,
+          "ecart_moyen_pct": -20.96,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 10.7,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 42.3,
+          "attente_moyenne_mois_quand_on_attend": 55.1,
+          "attente_mediane_mois_quand_on_attend": 54.0,
+          "attente_max_mois": 120,
+          "pire": {
+            "multiple": 0.37,
+            "depart": "1993-04"
+          },
+          "meilleur": {
+            "multiple": 13.62,
+            "depart": "1951-04"
+          },
+          "ecart_pire_pct": -83.12,
+          "ecart_meilleur_pct": 49.8,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 379,
+            "fenetres_totales": 806,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 86,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 341,
+            "pct_ou_B_bat_A": 31.7,
+            "ecart_median_pct": -40.68,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "JP_plushaut_historique",
+      "fichier": "krach_JP_plushaut_historique_JP_ath_zero_tout.csv"
+    },
+    {
+      "marche": "JP",
+      "horizon_months": 120,
+      "seuils": [
+        0.1,
+        0.2,
+        0.3
+      ],
+      "cash_rate": "taux_court",
+      "real": false,
+      "annual_fee": 0.0,
+      "debut": null,
+      "reference": "depuis_t0",
+      "delai_execution": 0,
+      "plus_haut_remonte_a": "1949-05",
+      "fenetres": 169,
+      "periode": "2002-04 -> 2026-04",
+      "A_multiple_median": 2.0,
+      "A_pire": {
+        "multiple": 0.73,
+        "depart": "2002-05"
+      },
+      "A_meilleur": {
+        "multiple": 3.67,
+        "depart": "2016-02"
+      },
+      "strategies": {
+        "B10": {
+          "pct_fenetres_ou_B_bat_A": 54.4,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 45.6,
+          "ecart_median_pct": 2.99,
+          "ecart_moyen_pct": -3.67,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 16.0,
+          "attente_mediane_mois_quand_on_attend": 10.0,
+          "attente_max_mois": 59,
+          "pire": {
+            "multiple": 0.67,
+            "depart": "2002-12"
+          },
+          "meilleur": {
+            "multiple": 3.46,
+            "depart": "2011-09"
+          },
+          "ecart_pire_pct": -49.44,
+          "ecart_meilleur_pct": 31.38,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 169,
+            "fenetres_totales": 169,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 54.4,
+            "ecart_median_pct": 2.99,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B20": {
+          "pct_fenetres_ou_B_bat_A": 48.5,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 51.5,
+          "ecart_median_pct": -2.27,
+          "ecart_moyen_pct": -2.22,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 0.0,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 27.4,
+          "attente_mediane_mois_quand_on_attend": 23.0,
+          "attente_max_mois": 65,
+          "pire": {
+            "multiple": 0.66,
+            "depart": "2002-08"
+          },
+          "meilleur": {
+            "multiple": 3.44,
+            "depart": "2011-02"
+          },
+          "ecart_pire_pct": -46.85,
+          "ecart_meilleur_pct": 57.63,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 169,
+            "fenetres_totales": 169,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 0,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 48.5,
+            "ecart_median_pct": -2.27,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        },
+        "B30": {
+          "pct_fenetres_ou_B_bat_A": 23.7,
+          "pct_fenetres_egalite_stricte": 0.0,
+          "pct_fenetres_ou_A_bat_B": 76.3,
+          "ecart_median_pct": -49.12,
+          "ecart_moyen_pct": -25.69,
+          "pct_fenetres_ou_le_krach_n_arrive_JAMAIS": 53.8,
+          "pct_fenetres_ou_le_signal_est_DEJA_LA_a_t0": 0.0,
+          "attente_moyenne_mois_quand_on_attend": 32.3,
+          "attente_mediane_mois_quand_on_attend": 30.5,
+          "attente_max_mois": 69,
+          "pire": {
+            "multiple": 0.71,
+            "depart": "2002-07"
+          },
+          "meilleur": {
+            "multiple": 3.2,
+            "depart": "2008-09"
+          },
+          "ecart_pire_pct": -72.42,
+          "ecart_meilleur_pct": 84.25,
+          "quand_le_signal_est_venu_APRES_t0": {
+            "fenetres": 78,
+            "fenetres_totales": 169,
+            "fenetres_exclues_car_signal_JAMAIS_venu": 91,
+            "fenetres_exclues_car_signal_DEJA_LA_a_t0": 0,
+            "pct_ou_B_bat_A": 51.3,
+            "ecart_median_pct": 5.1,
+            "A_NE_JAMAIS_CITER_SEUL": "Ce pourcentage EXCLUT les fenetres ou le krach n'est jamais venu — c'est-a-dire celles ou le robot a attendu 10 ans en cash sans jamais investir. Le citer sans son denominateur ni cette exclusion, c'est transformer une condition en resultat."
+          }
+        }
+      },
+      "cle": "JP_cash_remunere_2002",
+      "fichier": "krach_JP_cash_remunere_2002_JP_depuis_t0_taux_court_tout.csv"
+    }
+  ]
+}

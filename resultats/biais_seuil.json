@@ -1,0 +1,234 @@
+{
+  "genere_le": "2026-08-04 21:45 UTC",
+  "donnees_reelles": true,
+  "quoi": "Pourquoi le seuil des -20 % n'est plus franchi depuis 2010 dans notre moteur ? Deux suspects mesures separement : la granularite mensuelle et le rendement total.",
+  "A_granularite": {
+    "marche": "Nikkei 225 (FRED, Nikkei Inc.) — seul marche dont on a le quotidien sur longue periode",
+    "url": "https://fred.stlouisfed.org/series/NIKKEI225",
+    "periode": "1949-05 -> 2026-07",
+    "protocole": "Meme marche, meme periode, meme regle de repli. SEULE variable : la granularite.",
+    "ATTENTION_DEUX_COMPTAGES": "En QUOTIDIEN, un mois compte des qu'UN SEUL JOUR passe sous le seuil. En MENSUEL, il compte si LA VALEUR DU MOIS est sous le seuil. C'est voulu (le robot verrait-il un signal ?), mais les colonnes 'part des mois' ne mesurent donc PAS la meme chose.",
+    "quotidien_LA_VERITE": {
+      "B10": {
+        "mois_sous_le_seuil": 675,
+        "pct_du_temps": 72.8,
+        "dernier_mois_sous_le_seuil": "2026-07"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 546,
+        "pct_du_temps": 58.9,
+        "dernier_mois_sous_le_seuil": "2025-04"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 443,
+        "pct_du_temps": 47.8,
+        "dernier_mois_sous_le_seuil": "2023-03"
+      }
+    },
+    "fin_de_mois": {
+      "B10": {
+        "mois_sous_le_seuil": 614,
+        "pct_du_temps": 66.2,
+        "dernier_mois_sous_le_seuil": "2026-03"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 494,
+        "pct_du_temps": 53.3,
+        "dernier_mois_sous_le_seuil": "2023-10"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 400,
+        "pct_du_temps": 43.1,
+        "dernier_mois_sous_le_seuil": "2022-12"
+      }
+    },
+    "moyenne_du_mois_METHODE_SHILLER": {
+      "B10": {
+        "mois_sous_le_seuil": 605,
+        "pct_du_temps": 65.3,
+        "dernier_mois_sous_le_seuil": "2025-04"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 487,
+        "pct_du_temps": 52.5,
+        "dernier_mois_sous_le_seuil": "2023-05"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 397,
+        "pct_du_temps": 42.8,
+        "dernier_mois_sous_le_seuil": "2023-01"
+      }
+    },
+    "mois_rates_par_la_moyenne_du_mois": {
+      "B10": 70,
+      "B20": 59,
+      "B30": 46
+    },
+    "LIMITE": "Biais mesure sur le NIKKEI. Ce n'est pas mecaniquement sa valeur sur le S&P 500 : c'est un ORDRE DE GRANDEUR, a presenter comme tel."
+  },
+  "B_prix_contre_rendement_total": {
+    "marche": "S&P 500 (Robert Shiller, ie_data.xls) — prix MOYENNE MENSUELLE",
+    "url": "https://shillerdata.com/",
+    "periode": "1934-01 -> 2026-06",
+    "protocole": "MEMES mois, MEME regle de plus-haut. SEULE variable : prix seul vs dividendes reinvestis.",
+    "prix_seul": {
+      "B10": {
+        "mois_sous_le_seuil": 537,
+        "pct_du_temps": 48.4,
+        "dernier_mois_sous_le_seuil": "2025-04"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 356,
+        "pct_du_temps": 32.1,
+        "dernier_mois_sous_le_seuil": "2022-10"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 245,
+        "pct_du_temps": 22.1,
+        "dernier_mois_sous_le_seuil": "2009-10"
+      }
+    },
+    "rendement_total_CE_QUE_LE_MOTEUR_UTILISE": {
+      "B10": {
+        "mois_sous_le_seuil": 346,
+        "pct_du_temps": 31.2,
+        "dernier_mois_sous_le_seuil": "2025-04"
+      },
+      "B20": {
+        "mois_sous_le_seuil": 180,
+        "pct_du_temps": 16.2,
+        "dernier_mois_sous_le_seuil": "2010-09"
+      },
+      "B30": {
+        "mois_sous_le_seuil": 123,
+        "pct_du_temps": 11.1,
+        "dernier_mois_sous_le_seuil": "2009-08"
+      }
+    },
+    "pire_repli_par_annee_10_dernieres": [
+      {
+        "annee": 2017,
+        "prix_seul_pct": -0.32,
+        "rendement_total_pct": -0.15
+      },
+      {
+        "annee": 2018,
+        "prix_seul_pct": -11.52,
+        "rendement_total_pct": -11.08
+      },
+      {
+        "annee": 2019,
+        "prix_seul_pct": -10.14,
+        "rendement_total_pct": -9.53
+      },
+      {
+        "annee": 2020,
+        "prix_seul_pct": -19.09,
+        "rendement_total_pct": -18.92
+      },
+      {
+        "annee": 2021,
+        "prix_seul_pct": -0.19,
+        "rendement_total_pct": -0.08
+      },
+      {
+        "annee": 2022,
+        "prix_seul_pct": -20.29,
+        "rendement_total_pct": -19.26
+      },
+      {
+        "annee": 2023,
+        "prix_seul_pct": -15.28,
+        "rendement_total_pct": -13.81
+      },
+      {
+        "annee": 2024,
+        "prix_seul_pct": -1.12,
+        "rendement_total_pct": -1.01
+      },
+      {
+        "annee": 2025,
+        "prix_seul_pct": -11.08,
+        "rendement_total_pct": -10.88
+      },
+      {
+        "annee": 2026,
+        "prix_seul_pct": -3.96,
+        "rendement_total_pct": -3.77
+      }
+    ]
+  },
+  "C_sp500_quotidien": {
+    "marche": "S&P 500, cours de CLOTURE QUOTIDIENS (indice de PRIX, sans dividendes)",
+    "source": "FRED SP500",
+    "url": "https://fred.stlouisfed.org/series/SP500",
+    "periode": "2016-08-04 -> 2026-08-03",
+    "seances": 2512,
+    "pire_repli_par_annee": [
+      {
+        "annee": 2016,
+        "pire_repli_quotidien_pct": -4.79,
+        "date": "2016-11-04"
+      },
+      {
+        "annee": 2017,
+        "pire_repli_quotidien_pct": -2.8,
+        "date": "2017-04-13"
+      },
+      {
+        "annee": 2018,
+        "pire_repli_quotidien_pct": -19.78,
+        "date": "2018-12-24"
+      },
+      {
+        "annee": 2019,
+        "pire_repli_quotidien_pct": -16.48,
+        "date": "2019-01-03"
+      },
+      {
+        "annee": 2020,
+        "pire_repli_quotidien_pct": -33.92,
+        "date": "2020-03-23"
+      },
+      {
+        "annee": 2021,
+        "pire_repli_quotidien_pct": -5.21,
+        "date": "2021-10-04"
+      },
+      {
+        "annee": 2022,
+        "pire_repli_quotidien_pct": -25.43,
+        "date": "2022-10-12"
+      },
+      {
+        "annee": 2023,
+        "pire_repli_quotidien_pct": -20.61,
+        "date": "2023-01-05"
+      },
+      {
+        "annee": 2024,
+        "pire_repli_quotidien_pct": -8.49,
+        "date": "2024-08-05"
+      },
+      {
+        "annee": 2025,
+        "pire_repli_quotidien_pct": -18.9,
+        "date": "2025-04-08"
+      },
+      {
+        "annee": 2026,
+        "pire_repli_quotidien_pct": -9.1,
+        "date": "2026-03-30"
+      }
+    ],
+    "pire_repli_de_la_periode_pct": -33.92,
+    "date_du_pire_repli": "2020-03-23",
+    "LIMITE_serie_glissante": "FRED SP500 ne couvre que les ~10 dernieres annees : le plus-haut de reference ne remonte pas avant le premier jour disponible. Valable pour 2020 et 2022, PAS pour une question anterieure.",
+    "LIMITE_prix_seul": "Indice de PRIX (sans dividendes) : a comparer a la colonne 'prix seul' de la section B, jamais a la colonne 'rendement total'."
+  },
+  "A_LIRE": {
+    "aucune_conclusion_pre_ecrite": "Ce fichier ne conclut pas a la place du fact-check : il donne les comptages. La phrase publiee au §7 doit citer CES chiffres, pas une intuition.",
+    "les_deux_effets_se_cumulent": "Granularite et rendement total ne s'excluent pas : ils poussent tous les deux dans le meme sens (moins de franchissements). Attribuer 100 % de l'effet a l'un des deux serait faux.",
+    "ce_que_le_protocole_a_fige": "Le protocole ep. 2 §3 dit 'S&P 500 dividendes reinvestis' et 'granularite mensuelle assumee et dite'. Les deux choix sont donc DANS le protocole : ce module ne les conteste pas, il en CHIFFRE la consequence sur le declenchement."
+  }
+}

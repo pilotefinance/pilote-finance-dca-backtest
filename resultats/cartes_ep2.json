@@ -1,0 +1,165 @@
+{
+  "genere_le": "2026-08-04 22:32 UTC",
+  "donnees_reelles": true,
+  "episode": "PF « Le Test » ép. 2 — Attendre le krach pour investir ?",
+  "convention_ecran": "en dollars, avant frais et avant impôt",
+  "REGLE": "Chaque carte porte SA source et SA date. Une carte sans source ne se monte pas.",
+  "INTERDICTIONS": [
+    "Ne jamais afficher `b20_si_signal` sans son sous-titre : c'est un sous-ensemble.",
+    "Ne jamais conclure « donc fais X » : le verdict est un constat historique (protocole §6).",
+    "Ne jamais présenter PWL comme contredisant B20 : deux questions différentes.",
+    "Ne jamais mélanger deux scénarios de périodes différentes sur une même carte."
+  ],
+  "cartes": [
+    {
+      "id": "perimetre",
+      "titre": "Le test",
+      "valeur": 990,
+      "unite": "fenêtres",
+      "sous_titre": "Départs mensuels, 1934-01 -> 2026-06, horizon 10 ans. En dollars, avant frais et avant impôt.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b20_bat_a",
+      "titre": "Attendre −20 % bat investir tout de suite",
+      "valeur": 36.1,
+      "unite": "%",
+      "sous_titre": "Sur les 990 fenêtres. Écart médian -27.62 %.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b20_jamais",
+      "titre": "Le krach de −20 % n'est JAMAIS venu",
+      "valeur": 32.0,
+      "unite": "%",
+      "sous_titre": "Des fenêtres de 10 ans où le robot est resté en cash du début à la fin.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b30_jamais",
+      "titre": "Le krach de −30 % n'est JAMAIS venu",
+      "valeur": 64.4,
+      "unite": "%",
+      "sous_titre": "Écart médian de B30 sur l'ensemble : -48.39 %.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b10_toujours",
+      "titre": "Un repli de −10 %, lui, finit TOUJOURS par arriver",
+      "valeur": 100.0,
+      "unite": "%",
+      "sous_titre": "Sur les 990 fenêtres de 10 ans. Attente médiane : 26.0 mois — et attendre reste perdant (-7.15 % en médiane).",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b20_attente",
+      "titre": "Attente moyenne avant le signal −20 %",
+      "valeur": 48.9,
+      "unite": "mois",
+      "sous_titre": "Quand le signal finit par venir. Attente la plus longue observée avant un signal : 120 mois — à ne pas confondre avec les fenêtres où il n'est jamais venu (32.0 %).",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b20_si_signal",
+      "titre": "Quand le krach vient, attendre finit devant… une fois sur deux",
+      "valeur": 53.0,
+      "unite": "%",
+      "sous_titre": "⚠️ SOUS-ENSEMBLE : 673 fenêtres sur 990. Exclut les 317 fenêtres où le krach n'est jamais venu. NE JAMAIS afficher seul.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "temoin_pire",
+      "titre": "Le témoin, dans sa pire fenêtre",
+      "valeur": 0.7,
+      "unite": "×",
+      "sous_titre": "Départ 1999-03. Meilleure fenêtre : ×6.82 (départ 1949-06).",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "b20_pire",
+      "titre": "Le robot « j'attends −20 % », dans sa pire fenêtre",
+      "valeur": 0.94,
+      "unite": "×",
+      "sous_titre": "Départ 1999-03. Pire écart face au témoin : -82.39 %.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_principal_US_depuis_t0_taux_court_1934-01.csv"
+    },
+    {
+      "id": "pwl_us",
+      "titre": "PWL Capital 2020 — le krach a DÉJÀ eu lieu",
+      "valeur": 50.0,
+      "unite": "%",
+      "sous_titre": "Le tout d'un coup bat l'étalement sur 12 mois. Question DIFFÉRENTE de la nôtre.",
+      "source": "Benjamin Felix, PWL Capital, « Dollar Cost Averaging vs. Lump Sum Investing », juin 2020 — Table 7, p. 9",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "PDF PWL (lu le 04/08/2026)"
+    },
+    {
+      "id": "pwl_replique",
+      "titre": "Le même test, nos données",
+      "valeur": 71.3,
+      "unite": "%",
+      "sous_titre": "181 fenêtres démarrant le mois suivant une chute ≥ 20 %, soit seulement 14 blocs contigus — et encore moins de krachs réels. Écart avec PWL (+21.3 pt) SIGNALÉ, pas expliqué : la seule piste est celle que PWL avance lui-même (ses années 1930), et nous ne pouvons pas la tester.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "synthese_krach.json"
+    },
+    {
+      "id": "lecture_comparative",
+      "titre": "L'autre lecture du « dernier plus-haut »",
+      "valeur": 29.8,
+      "unite": "%",
+      "sous_titre": "Plus-haut historique réel (le pic peut être antérieur à t0), même période. Lecture retenue : 36.1 %.",
+      "source": "S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com · Taux du cash — bon du Trésor US 3 mois, FRED TB3MS",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_US_plushaut_historique_US_ath_taux_court_1934-01.csv"
+    },
+    {
+      "id": "japon",
+      "titre": "Le témoin japonais — attendre −20 %",
+      "valeur": 40.4,
+      "unite": "%",
+      "sous_titre": "806 fenêtres, 1949-05 -> 2026-06. Nikkei SANS dividendes (Japon sous-estimé) et cash à 0 % (robot défavorisé) : c'est un plancher.",
+      "source": "Nikkei 225 — FRED (Nikkei Inc.), PRIX SEUL, sans dividendes",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "krach_JP_JP_depuis_t0_zero_tout.csv"
+    },
+    {
+      "id": "granularite_2020",
+      "titre": "Le krach de 2020, vu de trois façons",
+      "valeur": -33.92,
+      "unite": "%",
+      "sous_titre": "Cours quotidiens, prix (2020-03-23) : -33.92 % — moyenne mensuelle, prix : -19.09 % — moyenne mensuelle, dividendes réinvestis (NOTRE donnée) : -18.92 %. Les trois chiffres ensemble, jamais les deux extrêmes seuls : l'écart vient de la granularité ET du choix de l'indice.",
+      "source": "S&P 500 cours quotidiens — FRED SP500 · S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "biais_seuil.json"
+    },
+    {
+      "id": "granularite_2022",
+      "titre": "Le krach de 2022, vu de trois façons",
+      "valeur": -25.43,
+      "unite": "%",
+      "sous_titre": "Cours quotidiens, prix (2022-10-12) : -25.43 % — moyenne mensuelle, prix : -20.29 % — moyenne mensuelle, dividendes réinvestis (NOTRE donnée) : -19.26 %. Les trois chiffres ensemble, jamais les deux extrêmes seuls : l'écart vient de la granularité ET du choix de l'indice.",
+      "source": "S&P 500 cours quotidiens — FRED SP500 · S&P 500 dividendes réinvestis — Robert Shiller, shillerdata.com",
+      "date_generation": "2026-08-04 22:32 UTC",
+      "fichier_source": "biais_seuil.json"
+    }
+  ]
+}
