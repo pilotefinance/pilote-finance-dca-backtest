@@ -1,0 +1,87 @@
+{
+  "_lisez_moi": "Relevé produit par relever_frais_ep3.py — extraction déterministe, aucun chiffre saisi à la main, aucun chiffre lu par un modèle. Définition figée AVANT le relevé dans DEFINITION_FRAIS_ep3.md.",
+  "document": {
+    "titre": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+    "reference": "ESMA50-1949966494-4065",
+    "publie_le": "2026-03-03",
+    "donnees_arretees_au": "2024-12-31",
+    "metadonnees_non_reverifiees": false,
+    "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+    "sha256": "0f87b0efc3b57765b42c44611cdd667853c44c981d915a5a4c12630f3041e68e",
+    "sha256_attendu": "0f87b0efc3b57765b42c44611cdd667853c44c981d915a5a4c12630f3041e68e",
+    "document_conforme_a_lempreinte": true
+  },
+  "table": {
+    "code": "MR-CP.14",
+    "titre": "UCITS costs and net performance by management type",
+    "page": 18,
+    "section": "Equity UCITS — Ongoing costs",
+    "entete_colonnes_verifie": true,
+    "annee_retenue": 2024,
+    "annees_disponibles": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ]
+  },
+  "definition_frais": "ongoing_costs_esma",
+  "releve_complet_toutes_categories": {
+    "actif": {
+      "categorie": "UCITS actions — gestion active",
+      "frais_courants_1an_pct": 1.28,
+      "frais_courants_10ans_pct": 1.39
+    },
+    "passif_non_etf": {
+      "categorie": "UCITS actions — gestion passive hors ETF",
+      "frais_courants_1an_pct": 0.22,
+      "frais_courants_10ans_pct": 0.28
+    },
+    "etf": {
+      "categorie": "UCITS actions — ETF",
+      "frais_courants_1an_pct": 0.21,
+      "frais_courants_10ans_pct": 0.26
+    }
+  },
+  "regle_de_selection_des_bornes": "borne basse = la plus basse des trois catégories à l'horizon 1 an ; borne haute = la plus haute. Règle mécanique figée avant lecture : aucun choix humain.",
+  "_ces_hypotheses_ne_sont_pas_relevees": [
+    "capital_initial",
+    "versement_annuel",
+    "horizons_ans",
+    "hypotheses_rendement_brut_pct"
+  ],
+  "capital_initial": 10000.0,
+  "versement_annuel": 0.0,
+  "horizons_ans": [
+    10,
+    20,
+    30
+  ],
+  "hypotheses_rendement_brut_pct": [
+    0.0,
+    5.0,
+    7.0
+  ],
+  "phrase_categories": "Ces deux chiffres sont des moyennes de deux catégories différentes de fonds actions — « UCITS actions — ETF » et « UCITS actions — gestion active » — publiées le même jour dans le même tableau de l'ESMA ; ce ne sont pas deux produits, et l'écart entre eux n'est pas un conseil.",
+  "bornes": {
+    "basse": {
+      "valeur_pct": 0.21,
+      "definition": "ongoing_costs_esma",
+      "categorie": "UCITS actions — ETF",
+      "source": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+      "page": "p. 18, table MR-CP.14, « Equity UCITS », 2024, horizon 1 an",
+      "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+      "date_releve": "2026-08-07"
+    },
+    "haute": {
+      "valeur_pct": 1.28,
+      "definition": "ongoing_costs_esma",
+      "categorie": "UCITS actions — gestion active",
+      "source": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+      "page": "p. 18, table MR-CP.14, « Equity UCITS », 2024, horizon 1 an",
+      "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+      "date_releve": "2026-08-07"
+    }
+  }
+}

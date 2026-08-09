@@ -1,0 +1,191 @@
+{
+  "moteur": "simulateur_frais.py",
+  "episode": "PF « Le Test » ép. 3 — ETF",
+  "calcule_le": "2026-08-06T22:15:55+00:00",
+  "definition_frais": {
+    "cle": "ongoing_costs_esma",
+    "libelle": "frais courants annuels (ongoing costs)",
+    "perimetre": "Couts RECURRENTS supportes par le fonds sur une annee (frais de gestion, couts de transaction DU FONDS, commissions de performance), tels que publies dans le DIC PRIIPs. Les retrocessions aux distributeurs sont DEDANS, pas dehors. N'inclut NI les frais d'entree/sortie, NI l'ecart achat-vente paye en Bourse, NI le courtage paye par l'investisseur, NI les frais d'enveloppe, NI la fiscalite.",
+    "document": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+    "reference": "ESMA50-1949966494-4065, 3 mars 2026 (donnees arretees au 31/12/2024)"
+  },
+  "convention_calcul": "Intérêts composés, pas de temps mensuel. Chaque mois : performance brute, puis prélèvement des frais sur l'encours, puis versement (fin de mois). Les frais annuels f vérifient exactement (1 - f_mensuel)^12 = 1 - f.",
+  "hypotheses": {
+    "capital_initial": 10000.0,
+    "versement_annuel": 0.0,
+    "horizons_ans": [
+      10,
+      20,
+      30
+    ],
+    "hypotheses_rendement_brut_pct": [
+      0.0,
+      5.0,
+      7.0
+    ]
+  },
+  "bornes": {
+    "basse": {
+      "valeur_pct": 0.21,
+      "definition": "ongoing_costs_esma",
+      "categorie": "UCITS actions — ETF",
+      "source": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+      "page": "p. 18, table MR-CP.14, « Equity UCITS », 2024, horizon 1 an",
+      "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+      "date_releve": "2026-08-07",
+      "definition_libelle": "frais courants annuels (ongoing costs)",
+      "definition_perimetre": "Couts RECURRENTS supportes par le fonds sur une annee (frais de gestion, couts de transaction DU FONDS, commissions de performance), tels que publies dans le DIC PRIIPs. Les retrocessions aux distributeurs sont DEDANS, pas dehors. N'inclut NI les frais d'entree/sortie, NI l'ecart achat-vente paye en Bourse, NI le courtage paye par l'investisseur, NI les frais d'enveloppe, NI la fiscalite."
+    },
+    "haute": {
+      "valeur_pct": 1.28,
+      "definition": "ongoing_costs_esma",
+      "categorie": "UCITS actions — gestion active",
+      "source": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+      "page": "p. 18, table MR-CP.14, « Equity UCITS », 2024, horizon 1 an",
+      "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+      "date_releve": "2026-08-07",
+      "definition_libelle": "frais courants annuels (ongoing costs)",
+      "definition_perimetre": "Couts RECURRENTS supportes par le fonds sur une annee (frais de gestion, couts de transaction DU FONDS, commissions de performance), tels que publies dans le DIC PRIIPs. Les retrocessions aux distributeurs sont DEDANS, pas dehors. N'inclut NI les frais d'entree/sortie, NI l'ecart achat-vente paye en Bourse, NI le courtage paye par l'investisseur, NI les frais d'enveloppe, NI la fiscalite."
+    },
+    "ecart_points_de_frais": 1.07
+  },
+  "publication": "grille_entiere_obligatoire",
+  "a_dire_a_lecran": [
+    "Ces deux chiffres sont des moyennes de deux catégories différentes de fonds actions — « UCITS actions — ETF » et « UCITS actions — gestion active » — publiées le même jour dans le même tableau de l'ESMA ; ce ne sont pas deux produits, et l'écart entre eux n'est pas un conseil.",
+    "à performance brute identique — hypothèse d'école",
+    "toutes choses égales par ailleurs : ça n'arrive jamais",
+    "ce calcul ne dit pas lequel choisir"
+  ],
+  "mentions_obligatoires": [
+    "à performance brute identique — hypothèse d'école",
+    "toutes choses égales par ailleurs : ça n'arrive jamais",
+    "ce calcul ne dit pas lequel choisir"
+  ],
+  "ce_que_ce_calcul_ne_prouve_pas": [
+    "Il ne dit pas lequel choisir : il chiffre un écart de frais, rien d'autre.",
+    "Il suppose la performance brute identique — ce qui n'arrive jamais.",
+    "Les frais courants n'incluent ni l'écart achat-vente payé en Bourse, ni le courtage de l'investisseur, ni les frais d'enveloppe, ni la fiscalité : le chiffre SOUS-ESTIME le coût réel. En revanche les rétrocessions aux distributeurs sont DEDANS — ne pas les retrancher une seconde fois.",
+    "Une fourchette de catégorie n'est pas le frais d'un produit.",
+    "L'effet des frais n'est pas linéaire : « le coût moyen par point » est une moyenne sur l'écart relevé, pas le coût d'un point pris isolément — c'est pourquoi le coût du point suivant est publié à côté.",
+    "La « part mangée par la borne haute » se mesure contre un fonds à frais nuls, qui n'existe pas. C'est le plus gros chiffre de cette sortie et le plus facile à mal dire : il ne peut pas s'écrire « les frais te prennent X % » — il ne compare à rien de réel.",
+    "Les valeurs relevées agrègent investisseurs particuliers ET institutionnels (note de la table ESMA) : aucune ne peut s'annoncer comme « ce que TU paies ».",
+    "Aucune de ces valeurs n'est une prévision : c'est de l'arithmétique sur des hypothèses affichées."
+  ],
+  "avertissements": [
+    "Ces deux chiffres sont des moyennes de deux catégories différentes de fonds actions — « UCITS actions — ETF » et « UCITS actions — gestion active » — publiées le même jour dans le même tableau de l'ESMA ; ce ne sont pas deux produits, et l'écart entre eux n'est pas un conseil."
+  ],
+  "grille": [
+    {
+      "horizon_ans": 10,
+      "hypothese_rendement_brut_pct": 0.0,
+      "capital_final_borne_basse": 9791.97,
+      "capital_final_borne_haute": 8791.27,
+      "capital_final_sans_frais": 10000.0,
+      "ecart_euros": 1000.71,
+      "ecart_en_pct_du_capital_sans_frais": 10.0071,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 935.24,
+      "cout_du_point_de_frais_suivant_euros": 938.17,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 12.0873
+    },
+    {
+      "horizon_ans": 10,
+      "hypothese_rendement_brut_pct": 5.0,
+      "capital_final_borne_basse": 15950.09,
+      "capital_final_borne_haute": 14320.05,
+      "capital_final_sans_frais": 16288.95,
+      "ecart_euros": 1630.05,
+      "ecart_en_pct_du_capital_sans_frais": 10.0071,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 1523.41,
+      "cout_du_point_de_frais_suivant_euros": 1528.18,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 12.0873
+    },
+    {
+      "horizon_ans": 10,
+      "hypothese_rendement_brut_pct": 7.0,
+      "capital_final_borne_basse": 19262.29,
+      "capital_final_borne_haute": 17293.75,
+      "capital_final_sans_frais": 19671.51,
+      "ecart_euros": 1968.54,
+      "ecart_en_pct_du_capital_sans_frais": 10.0071,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 1839.76,
+      "cout_du_point_de_frais_suivant_euros": 1845.52,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 12.0873
+    },
+    {
+      "horizon_ans": 20,
+      "hypothese_rendement_brut_pct": 0.0,
+      "capital_final_borne_basse": 9588.27,
+      "capital_final_borne_haute": 7728.64,
+      "capital_final_sans_frais": 10000.0,
+      "ecart_euros": 1859.64,
+      "ecart_en_pct_du_capital_sans_frais": 18.5964,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 1737.98,
+      "cout_du_point_de_frais_suivant_euros": 1749.29,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 22.7136
+    },
+    {
+      "horizon_ans": 20,
+      "hypothese_rendement_brut_pct": 5.0,
+      "capital_final_borne_basse": 25440.55,
+      "capital_final_borne_haute": 20506.38,
+      "capital_final_sans_frais": 26532.98,
+      "ecart_euros": 4934.17,
+      "ecart_en_pct_du_capital_sans_frais": 18.5964,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 4611.37,
+      "cout_du_point_de_frais_suivant_euros": 4641.39,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 22.7136
+    },
+    {
+      "horizon_ans": 20,
+      "hypothese_rendement_brut_pct": 7.0,
+      "capital_final_borne_basse": 37103.6,
+      "capital_final_borne_haute": 29907.39,
+      "capital_final_sans_frais": 38696.84,
+      "ecart_euros": 7196.21,
+      "ecart_en_pct_du_capital_sans_frais": 18.5964,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 6725.43,
+      "cout_du_point_de_frais_suivant_euros": 6769.21,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 22.7136
+    },
+    {
+      "horizon_ans": 30,
+      "hypothese_rendement_brut_pct": 0.0,
+      "capital_final_borne_basse": 9388.81,
+      "capital_final_borne_haute": 6794.45,
+      "capital_final_sans_frais": 10000.0,
+      "ecart_euros": 2594.36,
+      "ecart_en_pct_du_capital_sans_frais": 25.9436,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 2424.64,
+      "cout_du_point_de_frais_suivant_euros": 2448.33,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 32.0555
+    },
+    {
+      "horizon_ans": 30,
+      "hypothese_rendement_brut_pct": 5.0,
+      "capital_final_borne_basse": 40577.91,
+      "capital_final_borne_haute": 29365.23,
+      "capital_final_sans_frais": 43219.42,
+      "ecart_euros": 11212.68,
+      "ecart_en_pct_du_capital_sans_frais": 25.9436,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 10479.14,
+      "cout_du_point_de_frais_suivant_euros": 10581.55,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 32.0555
+    },
+    {
+      "horizon_ans": 30,
+      "hypothese_rendement_brut_pct": 7.0,
+      "capital_final_borne_basse": 71470.04,
+      "capital_final_borne_haute": 51721.1,
+      "capital_final_sans_frais": 76122.55,
+      "ecart_euros": 19748.94,
+      "ecart_en_pct_du_capital_sans_frais": 25.9436,
+      "cout_moyen_par_point_sur_lecart_releve_euros": 18456.95,
+      "cout_du_point_de_frais_suivant_euros": 18637.33,
+      "part_mangee_par_la_borne_haute_pct_VS_UN_FONDS_SANS_FRAIS_QUI_NEXISTE_PAS": 32.0555
+    }
+  ],
+  "faits": {
+    "fichier": "faits_frais_ep3.json",
+    "sha256": "8923c2e13135c9762dc15941ab3e75e81c887b55b4f0119d3ffdb94534e7e838"
+  }
+}

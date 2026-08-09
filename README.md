@@ -86,3 +86,57 @@ enterrées : Shiller lisse les krachs, le Japon est sans dividendes, l'euro n'ex
 
 **Un backtest MESURE LE PASSÉ. Il ne prédit RIEN sur le futur.**
 Expérience pédagogique sur données passées — **pas un conseil en investissement.**
+
+## Épisode 3 — « Les frais : ce que dit le document officiel que personne ne lit »
+
+Le troisième épisode ne rejoue pas un backtest : il **lit un document réglementaire** et **reprend
+une mesure publiée par le régulateur**, puis chiffre ce qu'un écart de frais change sur un capital
+placé une fois.
+
+**La définition avant le chiffre.** Le périmètre des « frais courants » a été figé **avant** le
+relevé, dans [`DEFINITION_FRAIS_ep3.md`](DEFINITION_FRAIS_ep3.md) : deux chiffres de définitions
+différentes produisent un résultat arithmétiquement juste et éditorialement faux. Le module refuse
+de comparer deux bornes qui ne partagent pas la même définition (`BornesIncomparables`).
+
+**Le protocole a été figé AVANT le moindre calcul** :
+[`PROTOCOLE_ep3_frais.md`](PROTOCOLE_ep3_frais.md).
+
+**Aucun chiffre n'est saisi à la main.** Ils sont extraits du PDF de l'ESMA par
+`relever_frais_ep3.py`, et l'empreinte SHA-256 du document est vérifiée à chaque exécution : si
+l'ESMA remplace son PDF, le relevé **s'arrête** au lieu de s'adapter.
+
+```bash
+pip install -r requirements.txt
+python relever_frais_ep3.py       # PDF ESMA -> faits_frais_ep3.json      (voir note ci-dessous)
+python relever_citations_ep3.py   # PDF ESMA -> faits_citations_ep3.json
+python simulateur_frais.py        # -> resultats_ep3/frais_ep3.json
+python -m pytest test_simulateur_frais.py test_relever_frais_ep3.py test_carte_source.py
+```
+
+> **Le PDF de l'ESMA n'est pas redistribué ici** — c'est le document du régulateur. On publie son
+> URL et son empreinte SHA-256 (dans `faits_frais_ep3.json`), ce qui permet de vérifier qu'on a lu
+> **exactement** le même fichier. Place-le dans `sources_ep3/` pour rejouer les relevés ; sans lui,
+> les tests qui en dépendent sont **ignorés proprement** (`skip`), jamais contournés.
+> Source : ESMA, *Costs and Performance of EU Retail Investment Products 2025*
+> (ESMA50-1949966494-4065), publié le 03/03/2026, données arrêtées au 31/12/2024 — table MR-CP.14, p. 18.
+
+### Les fichiers de l'épisode 3
+
+| Fichier | Quoi |
+|---|---|
+| `DEFINITION_FRAIS_ep3.md` | Le périmètre des frais, figé **avant** le relevé. |
+| `PROTOCOLE_ep3_frais.md` | Le protocole figé avant calcul (règle du Statisticien). |
+| `relever_frais_ep3.py` | Extraction déterministe des chiffres du PDF ESMA + vérification de l'empreinte. |
+| `relever_citations_ep3.py` | Extraction des citations affichées à l'écran, au caractère près. |
+| `simulateur_frais.py` | Le calcul : capital placé une fois, 10/20/30 ans, 0/5/7 % brut. |
+| `carte_source.py` | La liste blanche des domaines officiels : une source invérifiable à l'écran est refusée. |
+| `faits_frais_ep3.json` | Les chiffres relevés, avec leur catégorie, leur page et leur date. |
+| `faits_citations_ep3.json` | Les citations exactes, avec leur page et leur note. |
+| `resultats_ep3/frais_ep3.json` | La grille complète + ce que le calcul **ne prouve pas**. |
+
+### Ce que ce calcul ne prouve pas
+
+C'est écrit dans le JSON de résultats, et dit dans la vidéo : il **ne dit pas lequel choisir** — il
+chiffre un écart de frais, rien d'autre. Il suppose la performance brute identique, ce qui n'arrive
+jamais. Les frais courants **sous-estiment** le coût réel (ni courtage, ni écart achat-vente, ni
+enveloppe, ni fiscalité). Et une moyenne de catégorie ne décrit **aucun produit** en particulier.

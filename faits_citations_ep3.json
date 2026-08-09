@@ -1,0 +1,44 @@
+{
+  "_lisez_moi": "Citations AFFICHEES A L'ECRAN, extraites du PDF source par relever_citations_ep3.py. Aucune n'est saisie a la main. L'empreinte SHA-256 du PDF est verifiee avant toute extraction.",
+  "document": {
+    "titre": "ESMA Market Report — Costs and Performance of EU Retail Investment Products 2025",
+    "reference": "ESMA50-1949966494-4065",
+    "url": "https://www.esma.europa.eu/sites/default/files/2026-03/ESMA50-1949966494-4065_Market_Report_-_Costs_and_Performance_of_EU_Retail_Investment_Products.pdf",
+    "sha256": "0f87b0efc3b57765b42c44611cdd667853c44c981d915a5a4c12630f3041e68e",
+    "sha256_conforme": true
+  },
+  "sous_titre_table": {
+    "citation_exacte": "Passive funds are on average about 60–80% cheaper than active funds",
+    "table": "MR-CP.14",
+    "page": 18,
+    "langue": "en",
+    "_extrait_du_pdf": true,
+    "a_afficher_avec": "attribution explicite a l'ESMA : c'est le regulateur qui l'ecrit, pas nous."
+  },
+  "exclusion_ecart_achat_vente": {
+    "citation_exacte": "Bid-ask spreads can make the initial investment more expensive, especially considering that retail investment is carried out on the secondary market. Due to lack of data availability, this analysis does not include information on bid-ask spreads.",
+    "page": 19,
+    "note": 28,
+    "langue": "en",
+    "_extrait_du_pdf": true
+  },
+  "dic_trois_pages": {
+    "citation_exacte": "The key information document shall be drawn up as a short document written in a concise manner and of a maximum of three sides of A4-sized paper when printed",
+    "texte": "règlement (UE) n° 1286/2014, article 6, paragraphe 4",
+    "nature_de_la_regle": "plafond (maximum), pas un format impose",
+    "formulation_autorisee_a_lecran": "3 PAGES MAXIMUM",
+    "_nombre_de_pages_derive_de": "la citation (« three sides of A4-sized paper »)",
+    "a_qui": "investisseurs de détail (les fonds UCITS y sont entrés le 01/01/2023, fin de l'exemption transitoire)",
+    "a_qui_court": "investisseurs de détail",
+    "quand": "en temps utile avant que l'investisseur ne soit lié (article 13)",
+    "article_du_contenu": "règlement (UE) n° 1286/2014, article 8, paragraphe 3 — (c) « En quoi consiste ce produit ? » et (f) « Quels sont les coûts ? »",
+    "consolidation": "2024-01-09",
+    "statut": "en vigueur",
+    "url": "https://eur-lex.europa.eu/eli/reg/2014/1286/2024-01-09/eng",
+    "langue": "en",
+    "_extrait_du_pdf": false,
+    "_pourquoi": "fait JURIDIQUE : il ne vit pas dans le rapport ESMA mais dans EUR-Lex. Il ne peut donc pas etre extrait ici — il est verifie en direct, et la date ci-dessous le dit.",
+    "verifie_en_direct_le": "2026-08-08",
+    "peremption": "La modernisation du DIC (4 pages A4 + section « Product at a glance ») est la procedure 2023/0166 (COD), toujours en cours : application prevue 18 mois apres publication des actes delegues / RTS. A REVERIFIER si le tournage glisse de plus de 3 mois."
+  }
+}
