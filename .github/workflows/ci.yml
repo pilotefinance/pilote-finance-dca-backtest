@@ -1,0 +1,41 @@
+# CI publique — la preuve que les gates passent, sans nous croire sur parole.
+# Gate (nommée AVANT le code, règle §6 du studio) : ce workflow est FEU VERT si
+# ruff + les 192 tests passent sur ubuntu avec les versions figées de requirements.txt.
+# Il ne publie rien, ne déploie rien, n'utilise aucun secret.
+#
+# NOTE lint : `ruff check .` (config par défaut) = l'état que le code respecte aujourd'hui.
+# Le config studio (ruff.toml strict) sera branché après la mise en conformité des
+# fichiers ép. 3 (27 écarts de style relevés le 10/08/2026) — on ne fait pas naître
+# un badge rouge, on ne maquille pas non plus.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 7 1 * *" # le 1er du mois, 07:00 UTC — re-validation mensuelle (les tests, rien d'autre)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Dépendances (versions figées — inventaire vérifié, règle §2)
+        run: python -m pip install -r requirements.txt
+
+      - name: Lint (ruff)
+        run: python -m ruff check .
+
+      - name: Tests (pytest)
+        run: python -m pytest -q

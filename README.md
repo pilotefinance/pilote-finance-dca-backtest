@@ -1,5 +1,9 @@
 # Backtest — « DCA vs tout d'un coup » (Pilote Finance)
 
+[![CI](https://github.com/pilotefinance/pilote-finance-dca-backtest/actions/workflows/ci.yml/badge.svg)](https://github.com/pilotefinance/pilote-finance-dca-backtest/actions/workflows/ci.yml)
+*Ce badge est vert quand les 192 tests et le lint passent — vérifié par GitHub à chaque
+modification et re-validé chaque mois, pas par nous sur parole.*
+
 Le code de l'épisode **Pilote Finance — « DCA vs tout d'un coup »**. Il est publié pour que
 n'importe qui puisse **refaire le calcul** et nous contredire.
 
