@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pilote Finance — Le Test : les chiffres, vérifiables ici</title>
+<style>
+  :root { --nuit:#0a1626; --nuit2:#0f2036; --cyan:#4dd7f7; --blanc:#eef4fa; --gris:#8fa3b8; --orange:#f0a850; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--nuit); color:var(--blanc); font:16px/1.55 system-ui, Segoe UI, sans-serif; }
+  main { max-width:980px; margin:0 auto; padding:32px 20px 64px; }
+  h1 { font-size:1.7rem; margin-bottom:6px; }
+  h1 span { color:var(--cyan); }
+  h2 { font-size:1.25rem; margin:40px 0 4px; color:var(--cyan); }
+  .principe { background:var(--nuit2); border-left:3px solid var(--cyan); padding:12px 16px; margin:18px 0 8px; }
+  .principe b { color:var(--cyan); }
+  .muted { color:var(--gris); font-size:.9rem; }
+  .cartes { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:16px 0; }
+  .carte { background:var(--nuit2); border-radius:10px; padding:16px; }
+  .carte .val { font-size:1.9rem; font-weight:700; color:var(--cyan); }
+  .carte .lib { color:var(--gris); font-size:.85rem; margin-top:4px; }
+  .controles { margin:14px 0 8px; display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
+  select, input { background:var(--nuit2); color:var(--blanc); border:1px solid #22405e; border-radius:6px; padding:6px 10px; font-size:.9rem; }
+  table { width:100%; border-collapse:collapse; font-size:.85rem; margin-top:8px; }
+  th, td { padding:6px 8px; text-align:right; border-bottom:1px solid #17304a; white-space:nowrap; }
+  th { color:var(--cyan); cursor:pointer; position:sticky; top:0; background:var(--nuit); }
+  td:first-child, th:first-child { text-align:left; }
+  .neg { color:var(--orange); }
+  .pos { color:#7fe3a8; }
+  .tablewrap { max-height:420px; overflow:auto; border:1px solid #17304a; border-radius:8px; }
+  a { color:var(--cyan); }
+  .liens li { margin:6px 0 6px 18px; }
+  footer { margin-top:48px; padding-top:16px; border-top:1px solid #17304a; color:var(--gris); font-size:.85rem; }
+  .chargement { color:var(--gris); font-style:italic; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Pilote Finance — <span>Le Test</span> : les chiffres, vérifiables ici</h1>
+  <p class="muted">La chaîne qui mesure au lieu d'affirmer : <a href="https://www.youtube.com/@PiloteFinance">@PiloteFinance</a></p>
+
+  <div class="principe">
+    <b>Aucun chiffre n'est écrit dans cette page.</b> Votre navigateur télécharge à l'instant les CSV
+    produits par <a href="https://github.com/pilotefinance/pilote-finance-dca-backtest">le code public du dépôt</a>
+    et recalcule tout devant vous. Si nos vidéos disent autre chose que cette page, ce sont les vidéos qui ont tort.
+  </div>
+
+  <h2>Épisode 2 — « Attendre le krach pour investir ? »</h2>
+  <p class="muted">Un robot investit 10 000 $ tout de suite ; trois autres attendent un repli de −10 %, −20 % ou −30 %
+    (argent en bons du Trésor pendant l'attente). Horizon 10 ans, départs mensuels, S&amp;P 500 dividendes réinvestis.
+    <a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/blob/main/PROTOCOLE_ep2_krach.md">Protocole figé avant calcul</a> ·
+    <a href="https://youtu.be/rcTeNJhEOFU">la vidéo</a></p>
+  <div id="ep2-cartes" class="cartes"><div class="chargement">Téléchargement des fenêtres depuis le dépôt…</div></div>
+
+  <div class="controles">
+    <label>Seuil d'attente :
+      <select id="seuil">
+        <option value="B10">−10 %</option>
+        <option value="B20" selected>−20 %</option>
+        <option value="B30">−30 %</option>
+      </select>
+    </label>
+    <label>Départs dès : <input id="filtreAnnee" type="number" placeholder="ex. 1990" min="1934" max="2016" style="width:90px"></label>
+    <span class="muted">Clique un en-tête pour trier. Chaque ligne = un départ réel.</span>
+  </div>
+  <div class="tablewrap"><table id="ep2-table"></table></div>
+  <p class="muted" id="ep2-note"></p>
+
+  <h2>Épisode 1 — « DCA vs tout d'un coup »</h2>
+  <p class="muted">10 000 $ investis d'un coup, contre la même somme étalée sur 12 mois. Horizon 10 ans, départs mensuels.
+    <a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/blob/main/CONTRAT_backtest.md">Contrat du moteur</a> ·
+    <a href="https://youtu.be/I3JP1__lr6Y">la vidéo</a> ·
+    le bug qu'on avoue : <a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/blob/main/BUG_v1_2026-07-13.md">BUG_v1</a></p>
+  <div id="ep1-cartes" class="cartes"><div class="chargement">Téléchargement…</div></div>
+
+  <h2>Tout refaire vous-même</h2>
+  <ul class="liens">
+    <li><a href="https://github.com/pilotefinance/pilote-finance-dca-backtest">Le dépôt complet</a> — code, données, protocoles, licence MIT</li>
+    <li><a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/releases">Les releases par épisode</a> — le code exactement tel qu'il était le jour de chaque publication</li>
+    <li><a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/actions/workflows/ci.yml">La CI publique</a> — les tests tournent chez GitHub, pas chez nous</li>
+    <li><a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/issues/new/choose">Signaler une erreur de calcul</a> — si vous avez raison, on corrige en public</li>
+  </ul>
+
+  <footer>
+    Expérience pédagogique sur données passées (Robert Shiller, FRED — en dollars, avant frais et avant impôt,
+    sauf variantes dédiées du dépôt). Ce n'est pas un conseil en investissement : nous n'avons pas le statut pour,
+    et nous n'avons rien à vendre. Un backtest mesure le passé — il ne prédit rien.
+    <br>Page sans serveur ni base de données : les calculs ci-dessus ont eu lieu dans votre navigateur.
+  </footer>
+</main>
+
+<script>
+"use strict";
+const RAW = "https://raw.githubusercontent.com/pilotefinance/pilote-finance-dca-backtest/main/";
+const F1 = x => x.toLocaleString("fr-FR", {minimumFractionDigits:1, maximumFractionDigits:1});
+const PCT = x => F1(x) + " %";
+
+function parseCSV(texte) {
+  const lignes = texte.trim().split(/\r?\n/).filter(l => l.trim() !== "");
+  const cols = lignes[0].split(",");
+  return lignes.slice(1).map(l => {
+    const c = l.split(","); const o = {};
+    cols.forEach((k, i) => o[k] = c[i]);
+    return o;
+  });
+}
+const nb = v => parseFloat(v);
+const vrai = v => String(v).trim() === "True";
+function mediane(a) {
+  const t = [...a].sort((x, y) => x - y); const m = t.length >> 1;
+  return t.length % 2 ? t[m] : (t[m - 1] + t[m]) / 2;
+}
+const carte = (val, lib) => `<div class="carte"><div class="val">${val}</div><div class="lib">${lib}</div></div>`;
+
+let EP2 = [];
+async function chargeEp2() {
+  const r = await fetch(RAW + "resultats/krach_US_principal_US_depuis_t0_taux_court_1934-01.csv");
+  if (!r.ok) throw new Error("CSV ép.2 : HTTP " + r.status);
+  EP2 = parseCSV(await r.text());
+  const n = EP2.length;
+  const jamais = EP2.filter(x => !vrai(x.B20_declenche)).length;
+  const declenchees = EP2.filter(x => vrai(x.B20_declenche));
+  const bat = EP2.filter(x => nb(x.B20_ecart_pct) > 0).length;
+  // Médiane sur TOUTES les fenêtres (jamais-venues incluses) — même définition que le
+  // moteur (synthese_krach.json : ecart_median_pct). Exclure les jamais-venues serait
+  // « transformer une condition en résultat » (garde-fou A_NE_JAMAIS_CITER_SEUL).
+  const med = mediane(EP2.map(x => nb(x.B20_ecart_pct)));
+  const dernierDecl = declenchees.map(x => x.depart).sort().at(-1);
+  document.getElementById("ep2-cartes").innerHTML =
+    carte(n.toLocaleString("fr-FR"), "fenêtres de 10 ans testées (départs mensuels)") +
+    carte(PCT(100 * jamais / n), "des départs : le krach de −20 % n'est JAMAIS venu (argent resté de côté 10 ans)") +
+    carte(PCT(100 * bat / n), "des départs seulement : attendre −20 % a fait mieux qu'investir tout de suite") +
+    carte(PCT(med), "écart médian d'« attendre −20 % » vs investir tout de suite — toutes fenêtres confondues, jamais-venues incluses");
+  document.getElementById("ep2-note").textContent =
+    "Dernier départ dont le signal −20 % s'est déclenché : " + dernierDecl +
+    ". Tous les départs plus récents attendent encore. Recalculé à l'instant sur " + n + " lignes.";
+  rendsTable();
+}
+let tri = { col: "depart", sens: 1 };
+function rendsTable() {
+  const s = document.getElementById("seuil").value;
+  const an = document.getElementById("filtreAnnee").value;
+  let rows = EP2;
+  if (an) rows = rows.filter(x => x.depart >= an + "-01");
+  const cols = [
+    ["depart", "Départ"], ["fin", "Fin"],
+    [s + "_declenche", "Signal venu ?"], [s + "_mois_attente", "Mois d'attente"],
+    [s + "_ecart_pct", "Écart vs tout de suite"]
+  ];
+  rows = [...rows].sort((a, b) => {
+    const va = a[tri.col], vb = b[tri.col];
+    const na = parseFloat(va), nbv = parseFloat(vb);
+    const cmp = (!isNaN(na) && !isNaN(nbv)) ? na - nbv : String(va).localeCompare(String(vb));
+    return cmp * tri.sens;
+  });
+  const th = "<tr>" + cols.map(([c, l]) => `<th data-col="${c}">${l}${tri.col === c ? (tri.sens > 0 ? " ▲" : " ▼") : ""}</th>`).join("") + "</tr>";
+  const td = rows.map(x => {
+    const e = nb(x[s + "_ecart_pct"]);
+    const venu = vrai(x[s + "_declenche"]);
+    return `<tr><td>${x.depart}</td><td>${x.fin}</td>` +
+      `<td>${venu ? "oui" : "non — jamais"}</td>` +
+      `<td>${venu ? x[s + "_mois_attente"] : "—"}</td>` +
+      `<td class="${e >= 0 ? "pos" : "neg"}">${PCT(e)}${venu ? "" : " (cash 10 ans)"}</td></tr>`;
+  }).join("");
+  document.getElementById("ep2-table").innerHTML = th + td;
+  document.querySelectorAll("#ep2-table th").forEach(el =>
+    el.onclick = () => { const c = el.dataset.col; tri = { col: c, sens: tri.col === c ? -tri.sens : 1 }; rendsTable(); });
+}
+document.getElementById("seuil").onchange = rendsTable;
+document.getElementById("filtreAnnee").oninput = rendsTable;
+
+async function chargeEp1() {
+  const r = await fetch(RAW + "resultats/resultats_US_dca12_taux_court_nominal_1934-01.csv");
+  if (!r.ok) throw new Error("CSV ép.1 : HTTP " + r.status);
+  const rows = parseCSV(await r.text());
+  const n = rows.length;
+  const toutGagne = rows.filter(x => nb(x.A_ecart_pct) > 0).length;
+  const med = mediane(rows.map(x => nb(x.A_ecart_pct)));
+  document.getElementById("ep1-cartes").innerHTML =
+    carte(n.toLocaleString("fr-FR"), "fenêtres de 10 ans testées") +
+    carte(PCT(100 * toutGagne / n), "des départs : investir tout d'un coup a fini devant le DCA 12 mois") +
+    carte(PCT(med), "écart médian « tout d'un coup » vs DCA (positif = tout d'un coup devant)");
+}
+
+Promise.allSettled([chargeEp2(), chargeEp1()]).then(res => {
+  res.forEach((r, i) => { if (r.status === "rejected")
+    document.getElementById(i === 0 ? "ep2-cartes" : "ep1-cartes").innerHTML =
+      '<div class="carte"><div class="lib">Échec du chargement des données (' + r.reason.message +
+      '). Les CSV restent lisibles <a href="https://github.com/pilotefinance/pilote-finance-dca-backtest/tree/main/resultats">dans le dépôt</a>.</div></div>'; });
+});
+</script>
+</body>
+</html>
