@@ -11,7 +11,7 @@ openpyxl==3.1.5
 pypdf==6.15.0     # ep. 3 : extraction des citations et des chiffres du PDF ESMA.
                   # Le releve NE SE FAIT PAS a la main : sans pypdf, relever_frais_ep3
                   # s'arrete au lieu de deviner.
-pillow==12.2.0     # ep. 3 : carte_source.py dessine le bandeau source — les 5 tests d'encre
+pillow==12.3.0     # ep. 3 : carte_source.py dessine le bandeau source — les 5 tests d'encre
                    # en dependent. ABSENT de la v2 de ce fichier : installe localement par hasard,
                    # l'oubli etait invisible jusqu'a ce que la CI publique echoue a son 1er run
                    # (10/08/2026). Meme lecon que la v1 : l'inventaire se VERIFIE, ici par machine.
