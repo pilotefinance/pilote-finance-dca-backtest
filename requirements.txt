@@ -8,7 +8,7 @@ numpy==2.2.6
 requests==2.34.2
 xlrd==2.0.1        # OBLIGATOIRE : le fichier Shiller est un .xls (BIFF), openpyxl ne sait pas le lire
 openpyxl==3.1.5
-pypdf==6.15.0     # ep. 3 : extraction des citations et des chiffres du PDF ESMA.
+pypdf==6.21.4     # ep. 3 : extraction des citations et des chiffres du PDF ESMA.
                   # Le releve NE SE FAIT PAS a la main : sans pypdf, relever_frais_ep3
                   # s'arrete au lieu de deviner.
 pillow==12.2.0     # ep. 3 : carte_source.py dessine le bandeau source — les 5 tests d'encre
